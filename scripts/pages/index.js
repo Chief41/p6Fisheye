@@ -1,46 +1,57 @@
-    async function getPhotographers() {
-        // Ceci est un exemple de données pour avoir un affichage de photographes de test dès le démarrage du projet, 
-        // mais il sera à remplacer avec une requête sur le fichier JSON en utilisant "fetch".
-        let photographers = [
-            {
-                "name": "Ma data test",
-                "id": 1,
-                "city": "Paris",
-                "country": "France",
-                "tagline": "Ceci est ma data test",
-                "price": 400,
-                "portrait": "account.png"
-            },
-            {
-                "name": "Autre data test",
-                "id": 2,
-                "city": "Londres",
-                "country": "UK",
-                "tagline": "Ceci est ma data test 2",
-                "price": 500,
-                "portrait": "account.png"
-            },
-        ]
-        // et bien retourner le tableau photographers seulement une fois récupéré
-        return ({
-            photographers: [...photographers, ...photographers, ...photographers]})
-    }
+const reponse = fetch("data/photographers.json")
+.then(reponse => reponse.json())
+.then(data =>  {
+    for (let i = 0; i < data.photographers.length; i++) {
+        const photographer = data.photographers[i];
+        const photoGrid = document.querySelector(".photographer_section");
+        const photographerContainer = document.createElement("article");
+        photographerContainer.style.cursor = "pointer";
+        const photographerId = `../../../Front-End-Fisheye/assets/Sample Photos/Photographers ID Photos/${photographer.portrait}`;
+        
+        //creation d'une balise pour l'image
+        const imageElements = document.createElement("img");
+        imageElements.src = photographerId;
+        imageElements.style.borderRadius = "50%";
+        imageElements.style.objectFit = "cover";
 
-    async function displayData(photographers) {
-        const photographersSection = document.querySelector(".photographer_section");
+        // creation du h2 pour le nom 
+        const nameElement = document.createElement("h2");
+        nameElement.innerText = photographer.name;
 
-        photographers.forEach((photographer) => {
-            const photographerModel = photographerTemplate(photographer);
-            const userCardDOM = photographerModel.getUserCardDOM();
-            photographersSection.appendChild(userCardDOM);
-        });
-    }
+        // La ville
+        const myCity = document.createElement("p");
+        myCity.innerText = `${photographer.city}, ${photographer.country}`;
+        myCity.style.color = "#901C1C";
 
-    async function init() {
-        // Récupère les datas des photographes
-        const { photographers } = await getPhotographers();
-        displayData(photographers);
+
+        //La tagline 
+        const myTagline = document.createElement("p")
+        myTagline.innerText = photographer.tagline;
+
+
+        // le Prix
+        const price = document.createElement("p");
+        price.innerText = `${photographer.price} €/jour`
+        price.style.color = "#757575"
+
+        //Notre arboresence
+        photographerContainer.appendChild(imageElements);
+        photoGrid.appendChild(photographerContainer);
+        photographerContainer.appendChild(nameElement);
+        photographerContainer.appendChild(myCity);
+        photographerContainer.appendChild(myTagline);
+        photographerContainer.appendChild(price);
+
+        photographerContainer.addEventListener("click", function() {
+          // Stocker l'ID du photographe dans le localStorage
+          localStorage.setItem('selectedPhotographerId', photographer.id);
+          // Rediriger vers une autre page après le clic
+          window.location.href = "http://127.0.0.1:5500/Front-End-Fisheye/photographer.html";
+      });
     }
-    
-    init();
-    
+})
+.catch(error => console.error("Erreur lors du chargement du JSON :", error));
+
+
+
+
