@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         photoContenu.style.justifyContent = "space-around";
   
         userImages.map((src) => { // Utilisation de map pour itérer sur chaque élément de userImages
-          const username = selectedProfil.name.split(" ")[0].replace("-", " ");
+          const username = selectedProfil.name.split(" ")[0].replace("-", " "); // On éxtrait le nom du profil utilisé 
           // Utilisation de split pour diviser le nom en un tableau de mots
          // Ensuite, on prend le premier mot (l'index 0) et on remplace les tirets par des espaces
           const baseImagePath = `assets/Sample Photos/${username}/${src.image}`;
@@ -77,10 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
           const mediaElement = document.createElement(src.video ? "video" : "img");
           const srcElement = document.createElement("source");
           const description = document.createElement("p");
+          const likeNumber = document.createElement("p");
+          
   
           const photoDiv = document.createElement("div");
-          photoDiv.style.height = "200px";
-          photoDiv.style.width = "500px";
+         
   
           if (src.video) {
             mediaElement.appendChild(srcElement);
@@ -90,9 +91,9 @@ document.addEventListener("DOMContentLoaded", function () {
             mediaElement.src = baseImagePath;
           }
   
-          mediaElement.style.width = "380px";
-          mediaElement.style.height = "380px";
-          mediaElement.style.marginRight = "10px";
+          mediaElement.style.width = "324px";
+          mediaElement.style.height = "328px";
+          mediaElement.style.marginLeft = "58px";
           mediaElement.style.objectFit = "cover";
           mediaElement.style.borderRadius = "10px";
   
@@ -100,14 +101,20 @@ document.addEventListener("DOMContentLoaded", function () {
           photoDiv.style.height = "420px";
           photoDiv.style.marginBottom = "20px";
   
-          photoContenu.appendChild(mediaElement);
-          photoDiv.appendChild(mediaElement);
-          photoDiv.appendChild(description);
-          photoContenu.appendChild(photoDiv);
-  
+          
           description.innerText = src.title;
           description.style.color = "#901C1C";
           description.style.fontSize = "larger";
+          description.style.marginLeft = "58px"
+
+          likeNumber.innerText = src.likes;
+
+          photoContenu.appendChild(mediaElement);
+          photoDiv.appendChild(mediaElement);
+          photoDiv.appendChild(description);
+          photoDiv.appendChild(likeNumber);
+          photoContenu.appendChild(photoDiv);
+  
         });
   
         mainEvent.appendChild(profilUser);
@@ -126,5 +133,39 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) =>
         console.error("Erreur lors du chargement du JSON :", error)
       );
+
+
+  // Gérer mon block de likes
+  const myBody = document.querySelector("body");
+  const blockRose = document.createElement("div");
+  blockRose.classList.add('jaimeLeRose');
+  myBody.appendChild(blockRose);
+  
+  blockRose.style.background = "#DB8876";
+  blockRose.style.width = "15%";
+  blockRose.style.height = "33px";
+  blockRose.style.position = "absolute";
+  blockRose.style.bottom = "5%";
+  blockRose.style.right = "5%";
+  blockRose.style.zIndex = "999"; // Mettre le bloc au-dessus des autres éléments
+  myBody.style.zIndex = "1"
+  
+  
+  // événements de défilement
+  window.addEventListener('scroll', function() {
+      // Obtenir la position de défilement actuelle
+      const scrollPosition = window.scrollY;
+  
+      // Régler la position du bloc en fonction de la position de défilement
+      blockRose.style.bottom = (1 + scrollPosition) + "px";
   });
+  });
+
+  
+  
+
+
+  
+
+
   
