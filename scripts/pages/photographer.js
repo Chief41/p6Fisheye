@@ -240,18 +240,11 @@ document.addEventListener("DOMContentLoaded", function () {
   blockRose.style.background = "#DB8876";
   blockRose.style.width = "15%";
   blockRose.style.height = "33px";
-  blockRose.style.position = "absolute";
-  blockRose.style.bottom = "5%";
+  blockRose.style.position = "fixed";
+  blockRose.style.bottom = "0";
   blockRose.style.right = "5%";
   blockRose.style.zIndex = "999"; // Mettre le bloc au-dessus des autres éléments
   myBody.style.zIndex = "1";
 
-  // événements de défilement
-  window.addEventListener("scroll", function () {
-    // Obtenir la position de défilement actuelle
-    const scrollPosition = window.scrollX;
 
-    // Régler la position du bloc en fonction de la position de défilement
-    blockRose.style.bottom = 1 + scrollPosition + "px";
-  });
 });
