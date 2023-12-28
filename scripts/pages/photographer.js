@@ -11,12 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const userImages = media.filter(
         (m) => m.photographerId === Number(selectedPhotographerId)
       );
-      console.table(userImages);
       const selectedProfil = photographers.find(
         (p) => p.id === Number(selectedPhotographerId)
       );
 
-      // Si le profil n'est pas trouvé alors la console retourne aucun photographe séléctionné
+      // Si le profil n'est pas trouvé alors la console retourne aucun photographe sélectionné
       if (!selectedProfil) {
         console.log("Aucun photographe sélectionné.");
         return; // empêche de lire le reste du code si aucun photographes n'est trouvés
@@ -48,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
       selectTri.style.width = "150px";
       selectTri.style.height = "50px";
       selectTri.style.backgroundColor = "#901C1C";
-      selectTri.style.border = "#901C1C";
+      selectTri.style.border = "2px solid #901C1C"; // Ajoutez cette ligne pour la bordure
       selectTri.style.borderRadius = "5px";
       selectTri.style.fontWeight = "bold";
       selectTri.style.color = "white";
@@ -58,17 +57,22 @@ document.addEventListener("DOMContentLoaded", function () {
       btnPoupularity.style.fontSize = "large";
       btnPoupularity.style.fontWeight = "bold";
       btnPoupularity.style.color = "white";
+      btnPoupularity.style.borderBottom = "2px solid white"; // ligne pour la bordure
+      btnPoupularity.style.cursor = "pointer";
 
       btnDate.textContent = "Date";
       btnDate.style.fontSize = "large";
       btnDate.style.fontWeight = "bold";
       btnDate.style.color = "white";
-      btnDate.style.borderTop = "2px solid white";
+      btnDate.style.borderBottom = "2px solid white"; // ligne pour la bordure
+      btnDate.style.cursor = "pointer";
 
       btnTitre.textContent = "Titre";
       btnTitre.style.fontSize = "large";
       btnTitre.style.fontWeight = "bold";
       btnTitre.style.color = "white";
+      btnTitre.style.borderBottom = "2px solid white"; // ligne pour la bordure
+      btnTitre.style.cursor = "pointer";
 
       // Boîte de nos 3 éléments photo de profil/Nom/bouton
       const profilUser = document.querySelector(".photograph-header");
@@ -114,6 +118,32 @@ document.addEventListener("DOMContentLoaded", function () {
       photoContenu.style.flexWrap = "wrap";
       photoContenu.style.justifyContent = "space-around";
 
+      // Factory pour créer des éléments média
+      function createMediaElement(src, photographer) {
+        const username = photographer.name.split(" ")[0].replace("-", " ");
+        const baseImagePath = `assets/Sample Photos/${username}/${src.image}`;
+        const baseVideoPath = `assets/Sample Photos/${username}/${src.video}`;
+        
+        const mediaElement = document.createElement(src.video ? "video" : "img");
+        const srcElement = document.createElement("source");
+
+        if (src.video) {
+          mediaElement.appendChild(srcElement);
+          srcElement.src = baseVideoPath;
+          srcElement.type = "video/mp4";
+        } else if (src.image) {
+          mediaElement.src = baseImagePath;
+        }
+
+        mediaElement.style.width = "324px";
+        mediaElement.style.height = "328px";
+        mediaElement.style.marginLeft = "58px";
+        mediaElement.style.objectFit = "cover";
+        mediaElement.style.borderRadius = "10px";
+
+        return mediaElement;
+      }
+
       // Fonction pour mettre à jour les images en fonction du tri
       function updateImages() {
         const sortedImages = userImages.slice(); // Créer une copie du tableau
@@ -130,35 +160,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Recréer les éléments avec les images triées
         sortedImages.forEach((src) => {
-          const username = selectedProfil.name
-            .split(" ")[0]
-            .replace("-", " ");
-          const baseImagePath = `assets/Sample Photos/${username}/${src.image}`;
-          const baseVideoPath = `assets/Sample Photos/${username}/${src.video}`;
-          const mediaElement = document.createElement(
-            src.video ? "video" : "img"
-          );
-          const srcElement = document.createElement("source");
+          const mediaElement = createMediaElement(src, selectedProfil);
+
           const photoDiv = document.createElement("div");
           const description = document.createElement("p");
           const likeNumber = document.createElement("p");
           const boiteALike = document.createElement("div");
           const heartBox = document.createElement("div");
           const heartLike = document.createElement("i");
-
-          if (src.video) {
-            mediaElement.appendChild(srcElement);
-            srcElement.src = baseVideoPath;
-            srcElement.type = "video/mp4";
-          } else if (src.image) {
-            mediaElement.src = baseImagePath;
-          }
-
-          mediaElement.style.width = "324px";
-          mediaElement.style.height = "328px";
-          mediaElement.style.marginLeft = "58px";
-          mediaElement.style.objectFit = "cover";
-          mediaElement.style.borderRadius = "10px";
 
           photoDiv.style.width = "450px";
           photoDiv.style.height = "420px";
@@ -200,6 +209,31 @@ document.addEventListener("DOMContentLoaded", function () {
           boiteALike.appendChild(heartBox);
           boiteALike.appendChild(description);
         });
+
+        //Création de ma lightbox
+        const lightBox = document.querySelector(".lightBox");
+        const lightBoxNext = document.createElement("img");
+        const lightBoxClose = document.createElement("img");
+        const lightBoxPrev = document.createElement('img');
+
+        lightBox.style.position = "fixed";
+        lightBox.style.top = 0;
+        lightBox.style.left = 0;
+        lightBox.style.width = "100%";
+        lightBox.style.height = "100%";
+        lightBox.style.backgroundColor = "#0009";
+        lightBox.style.zIndex = 10;
+
+        lightBoxNext.src = "../../../Front-End-Fisheye/assets/icons/chevron.svg";
+        lightBoxClose.src = "../../../Front-End-Fisheye/assets/icons/close.svg";
+        lightBoxPrev.src = "../../../Front-End-Fisheye/assets/icons/prevChevron.svg";
+
+        lightBox.appendChild(lightBoxNext);
+        lightBox.appendChild(lightBoxPrev);
+        lightBox.appendChild(lightBoxClose);
+        mainEvent.appendChild(lightBox);
+
+
       }
 
       // Ajouter l'événement pour mettre à jour les images lors du changement de tri
@@ -224,8 +258,6 @@ document.addEventListener("DOMContentLoaded", function () {
       profilContainer.appendChild(myTag);
       photoContainer.appendChild(myPhoto);
       mainEvent.appendChild(photoContenu);
-
-      console.table(selectedProfil);
     })
     .catch((error) =>
       console.error("Erreur lors du chargement du JSON :", error)
@@ -235,16 +267,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const myBody = document.querySelector("body");
   const blockRose = document.createElement("div");
   blockRose.classList.add("jaimeLeRose");
-  myBody.appendChild(blockRose);
+  const totalLike = document.createElement("p");
+  let likesCount = 0;
 
-  blockRose.style.background = "#DB8876";
-  blockRose.style.width = "15%";
-  blockRose.style.height = "33px";
-  blockRose.style.position = "fixed";
-  blockRose.style.bottom = "0";
-  blockRose.style.right = "5%";
-  blockRose.style.zIndex = "999"; // Mettre le bloc au-dessus des autres éléments
-  myBody.style.zIndex = "1";
-
-
+  function incrementLikes() {
+    likesCount += 1;
+    totalLike.innerText = likesCount;
+  }
 });
