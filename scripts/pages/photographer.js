@@ -141,8 +141,60 @@ document.addEventListener("DOMContentLoaded", function () {
         mediaElement.style.objectFit = "cover";
         mediaElement.style.borderRadius = "10px";
 
+         //Création de ma lightbox
+         const lightBox = document.querySelector(".lightBox");
+         const lightBoxNext = document.createElement("img");
+         const lightBoxClose = document.createElement("img");
+         const lightBoxPrev = document.createElement('img');
+ 
+         lightBox.style.position = "fixed";
+         lightBox.style.top = 100;
+         lightBox.style.right = 100;
+         lightBox.style.marginLeft = "100px";
+         lightBox.style.width = "83%";
+         lightBox.style.height = "83%";
+         lightBox.style.backgroundColor = "black";
+         lightBox.style.zIndex = 10;
+         lightBox.style.display = "none";
+ 
+         mediaElement.addEventListener("click", function() {
+          console.log("ffff")
+           const boxPhoto = document.createElement = ('div');
+           mediaElement.appendChild(lightBox);
+           lightBox.appendChild(boxPhoto);         
+           lightBox.style.display = "flex";
+         })
+ 
+         lightBoxNext.src = "../../../Front-End-Fisheye/assets/icons/chevron.svg";
+         lightBoxNext.style.cursor = "pointer";
+         lightBoxNext.style.position = "fixed";
+         lightBoxNext.style.right = "10rem"
+         lightBoxNext.style.top = "20rem"
+ 
+         lightBoxClose.src = "../../../Front-End-Fisheye/assets/icons/croix.svg";
+         lightBoxClose.style.cursor = "pointer";
+         lightBoxClose.style.color = 'black'
+         lightBoxClose.style.position = "fixed";
+         lightBoxClose.style.right = "10rem"
+         lightBoxClose.addEventListener("click", function(){
+          lightBox.style.display = "none";
+         })
+         
+         lightBoxPrev.src = "../../../Front-End-Fisheye/assets/icons/prevChevron.svg";
+         lightBoxPrev.style.cursor = "pointer";
+         lightBoxPrev.style.position = "fixed";
+         lightBoxPrev.style.left = "7rem"
+         lightBoxPrev.style.top = "19.5rem"
+ 
+         lightBox.appendChild(lightBoxNext);
+         lightBox.appendChild(lightBoxPrev);
+         lightBox.appendChild(lightBoxClose);
+         //mainEvent.appendChild(lightBox);
+
         return mediaElement;
       }
+
+      
 
       // Fonction pour mettre à jour les images en fonction du tri
       function updateImages() {
@@ -200,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
           heartLike.style.marginLeft = "5px";
           heartLike.style.fontWeight = "bold";
 
-          photoContenu.appendChild(mediaElement);
+          //photoContenu.appendChild(mediaElement);
           photoDiv.appendChild(boiteALike);
           photoDiv.appendChild(mediaElement);
           photoContenu.appendChild(photoDiv);
@@ -210,29 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
           boiteALike.appendChild(description);
         });
 
-        //Création de ma lightbox
-        const lightBox = document.querySelector(".lightBox");
-        const lightBoxNext = document.createElement("img");
-        const lightBoxClose = document.createElement("img");
-        const lightBoxPrev = document.createElement('img');
-
-        lightBox.style.position = "fixed";
-        lightBox.style.top = 0;
-        lightBox.style.left = 0;
-        lightBox.style.width = "100%";
-        lightBox.style.height = "100%";
-        lightBox.style.backgroundColor = "#0009";
-        lightBox.style.zIndex = 10;
-
-        lightBoxNext.src = "../../../Front-End-Fisheye/assets/icons/chevron.svg";
-        lightBoxClose.src = "../../../Front-End-Fisheye/assets/icons/close.svg";
-        lightBoxPrev.src = "../../../Front-End-Fisheye/assets/icons/prevChevron.svg";
-
-        lightBox.appendChild(lightBoxNext);
-        lightBox.appendChild(lightBoxPrev);
-        lightBox.appendChild(lightBoxClose);
-        mainEvent.appendChild(lightBox);
-
+       
 
       }
 
