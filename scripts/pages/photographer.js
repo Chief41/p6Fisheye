@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const btnPoupularity = document.createElement("option");
       const btnDate = document.createElement("option");
       const btnTitre = document.createElement("option");
+      const bodyCount = document.querySelector("body");
+      const headerBand = document.querySelector("header");
 
       // Création des filtres trier par
       filterBox.classList.add("boxFilter");
@@ -123,8 +125,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const username = photographer.name.split(" ")[0].replace("-", " ");
         const baseImagePath = `assets/Sample Photos/${username}/${src.image}`;
         const baseVideoPath = `assets/Sample Photos/${username}/${src.video}`;
-        
-        const mediaElement = document.createElement(src.video ? "video" : "img");
+
+        const mediaElement = document.createElement(
+          src.video ? "video" : "img"
+        );
         const srcElement = document.createElement("source");
 
         if (src.video) {
@@ -140,61 +144,114 @@ document.addEventListener("DOMContentLoaded", function () {
         mediaElement.style.marginLeft = "58px";
         mediaElement.style.objectFit = "cover";
         mediaElement.style.borderRadius = "10px";
+        mediaElement.style.cursor = "pointer";
 
-         //Création de ma lightbox
-         const lightBox = document.querySelector(".lightBox");
-         const lightBoxNext = document.createElement("img");
-         const lightBoxClose = document.createElement("img");
-         const lightBoxPrev = document.createElement('img');
- 
-         lightBox.style.position = "fixed";
-         lightBox.style.top = 100;
-         lightBox.style.right = 100;
-         lightBox.style.marginLeft = "100px";
-         lightBox.style.width = "83%";
-         lightBox.style.height = "83%";
-         lightBox.style.backgroundColor = "black";
-         lightBox.style.zIndex = 10;
-         lightBox.style.display = "none";
- 
-         mediaElement.addEventListener("click", function() {
-          console.log("ffff")
-           const boxPhoto = document.createElement = ('div');
-           mediaElement.appendChild(lightBox);
-           lightBox.appendChild(boxPhoto);         
-           lightBox.style.display = "flex";
-         })
- 
-         lightBoxNext.src = "../../../Front-End-Fisheye/assets/icons/chevron.svg";
-         lightBoxNext.style.cursor = "pointer";
-         lightBoxNext.style.position = "fixed";
-         lightBoxNext.style.right = "10rem"
-         lightBoxNext.style.top = "20rem"
- 
-         lightBoxClose.src = "../../../Front-End-Fisheye/assets/icons/croix.svg";
-         lightBoxClose.style.cursor = "pointer";
-         lightBoxClose.style.color = 'black'
-         lightBoxClose.style.position = "fixed";
-         lightBoxClose.style.right = "10rem"
-         lightBoxClose.addEventListener("click", function(){
-          lightBox.style.display = "none";
-         })
-         
-         lightBoxPrev.src = "../../../Front-End-Fisheye/assets/icons/prevChevron.svg";
-         lightBoxPrev.style.cursor = "pointer";
-         lightBoxPrev.style.position = "fixed";
-         lightBoxPrev.style.left = "7rem"
-         lightBoxPrev.style.top = "19.5rem"
- 
-         lightBox.appendChild(lightBoxNext);
-         lightBox.appendChild(lightBoxPrev);
-         lightBox.appendChild(lightBoxClose);
-         //mainEvent.appendChild(lightBox);
+        //Création de ma lightbox
+        const lightBox = document.querySelector(".lightBox");
+        const lightBoxNext = document.createElement("img");
+        const lightBoxClose = document.createElement("img");
+        const lightBoxPrev = document.createElement("img");
+        let lightBoxImage;
+
+        lightBox.style.position = "absolute";
+        lightBox.style.top = "5%";
+        lightBox.style.right = "5";
+        lightBox.style.width = "100%";
+        lightBox.style.height = "100%";
+        lightBox.style.backgroundColor = "white";
+        lightBox.style.zIndex = 10;
+        lightBox.style.display = "block";
+
+        mediaElement.addEventListener("click", function (e) {
+          e.preventDefault()
+          lightBoxImage = document.createElement("div");
+
+          
+          const srcVideo = document.createElement("source");
+          const srcImage = document.createElement("img");
+          
+          
+           if (src.video) {
+            lightBoxImage = document.createElement("video");
+            srcVideo.src = baseVideoPath;
+            srcVideo.type = "video/mp4";
+            lightBoxImage.appendChild(srcVideo);
+          } else if(src.image){ 
+            srcImage.src = baseImagePath;
+            lightBoxImage.appendChild(srcImage);
+          }
+
+          //dimension de l'image
+          lightBoxImage.style.width = "85%";
+          lightBoxImage.style.height = "87%";
+          lightBoxImage.style.objectFit = "cover";
+          lightBoxImage.style.position = "fixed";
+          lightBoxImage.style.top = "8%";
+          lightBoxImage.style.left = "6%";
+
+          mainEvent.style.display = "none";
+          headerBand.style.display = "none";
+
+          lightBoxNext.src =
+            "../../../Front-End-Fisheye/assets/icons/chevron.svg";
+          lightBoxNext.style.cursor = "pointer";
+          lightBoxNext.style.position = "fixed";
+          lightBoxNext.style.right = "3.2rem";
+          lightBoxNext.style.top = "20rem";
+
+          const photos = Array.from(
+            photoContenu.querySelectorAll("img, video")
+          );
+          console.log(photos)
+          let currentIndex = 0;
+          console.log(currentIndex);
+
+          lightBoxNext.addEventListener("click", function () {
+            currentIndex++;
+            if (currentIndex < 0) {
+              currentIndex = photos.length + 1;
+              
+            }
+            lightBoxImage.src = photos[currentIndex].src;
+          });
+
+          lightBoxClose.src =
+            "../../../Front-End-Fisheye/assets/icons/croix.svg";
+          lightBoxClose.style.cursor = "pointer";
+          lightBoxClose.style.color = "black";
+          lightBoxClose.style.position = "fixed";
+          lightBoxClose.style.right = "4rem";
+          lightBoxClose.style.bottom = "38rem";
+          lightBoxClose.addEventListener("click", function () {
+            lightBox.style.display = "none";
+            mainEvent.style.display = "block";
+            headerBand.style.display = "none";
+          });
+
+          lightBoxPrev.src =
+            "../../../Front-End-Fisheye/assets/icons/prevChevron.svg";
+          lightBoxPrev.style.cursor = "pointer";
+          lightBoxPrev.style.position = "fixed";
+          lightBoxPrev.style.left = "0.5rem";
+          lightBoxPrev.style.top = "19.5rem";
+
+          lightBoxPrev.addEventListener("click", function () {
+            currentIndex--;
+            if (currentIndex < 0) {
+              currentIndex = photos.length - 1;
+            }
+            lightBoxImage.src = photos[currentIndex].src;
+          });
+
+          bodyCount.appendChild(lightBox);
+          lightBox.appendChild(lightBoxImage);
+          lightBox.appendChild(lightBoxNext);
+          lightBox.appendChild(lightBoxPrev);
+          lightBox.appendChild(lightBoxClose);
+        });
 
         return mediaElement;
       }
-
-      
 
       // Fonction pour mettre à jour les images en fonction du tri
       function updateImages() {
@@ -250,7 +307,29 @@ document.addEventListener("DOMContentLoaded", function () {
           heartLike.style.color = "#901C1C";
           heartLike.style.fontSize = "x-large";
           heartLike.style.marginLeft = "5px";
-          heartLike.style.fontWeight = "bold";
+          heartLike.style.fontWeight = "none";
+
+          // Gérer mon block de likes
+          const myBody = document.querySelector("body");
+          const blockRose = document.createElement("div");
+          const totalLike = document.createElement("p");
+          for (let i = 0; i < media.likes; i++) {
+            totalLike.innerText = media.likes;
+            
+          }
+
+
+          blockRose.classList.add("jaimeLeRose");
+          blockRose.style.position = "fixed";
+          blockRose.style.width = "20%";
+          blockRose.style.height = "9%";
+          blockRose.style.background = "#DB8876";
+          blockRose.style.top = "42rem";
+          blockRose.style.left = "72rem";
+
+          heartLike.addEventListener("click", function () {
+            heartLike.style.fontWeight = "bold";
+          });
 
           //photoContenu.appendChild(mediaElement);
           photoDiv.appendChild(boiteALike);
@@ -260,10 +339,9 @@ document.addEventListener("DOMContentLoaded", function () {
           heartBox.appendChild(likeNumber);
           boiteALike.appendChild(heartBox);
           boiteALike.appendChild(description);
+          blockRose.appendChild(totalLike);
+          myBody.appendChild(blockRose);
         });
-
-       
-
       }
 
       // Ajouter l'événement pour mettre à jour les images lors du changement de tri
@@ -292,16 +370,4 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) =>
       console.error("Erreur lors du chargement du JSON :", error)
     );
-
-  // Gérer mon block de likes
-  const myBody = document.querySelector("body");
-  const blockRose = document.createElement("div");
-  blockRose.classList.add("jaimeLeRose");
-  const totalLike = document.createElement("p");
-  let likesCount = 0;
-
-  function incrementLikes() {
-    likesCount += 1;
-    totalLike.innerText = likesCount;
-  }
 });
