@@ -166,18 +166,19 @@ document.addEventListener("DOMContentLoaded", function () {
           e.preventDefault();
           lightBoxImage = document.createElement("div");
 
-          const srcVideo = document.createElement("source");
+          const video = document.createElement("video");
           const srcImage = document.createElement("img");
+          let srcName;
 
           if (src.video) {
-            lightBoxImage = document.createElement("video");
-            srcVideo.src = baseVideoPath;
-            srcVideo.type = "video/mp4";
-            lightBoxImage.appendChild(srcVideo);
-          } else if (src.image) {
+           srcName = document.createElement("source");
+            srcName.src = baseVideoPath;        
+            video.appendChild(srcName);
+            lightBoxImage.appendChild(video);
+          }
             srcImage.src = baseImagePath;
             lightBoxImage.appendChild(srcImage);
-          }
+          
 
           //dimension de l'image
           srcImage.style.width = "85%";
@@ -186,6 +187,20 @@ document.addEventListener("DOMContentLoaded", function () {
           srcImage.style.position = "fixed";
           srcImage.style.top = "8%";
           srcImage.style.left = "6%";
+
+          video.style.width = "85%";
+          video.style.height = "87%";
+         video.style.objectFit = "cover";
+         video.style.position = "fixed";
+          video.style.top = "8%";
+          video.style.left = "6%";
+
+          lightBoxImage.style.width = "85%";
+          lightBoxImage.style.height = "87%";
+          lightBoxImage.style.objectFit = "cover";
+          lightBoxImage.style.position = "fixed";
+          lightBoxImage.style.top = "8%";
+          lightBoxImage.style.left = "6%";
 
           mainEvent.style.display = "none";
           headerBand.style.display = "none";
@@ -205,11 +220,15 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log(currentIndex);
 
           lightBoxNext.addEventListener("click", function () {
-            currentIndex++
+            currentIndex++;
             if (currentIndex < 0) {
               currentIndex = photos.length + 1;
+            
             }
+            currentIndex = photos.length + 1;
             srcImage.src = photos[currentIndex].src;
+            srcVideo.src = photos[currentIndex].src;
+            
           });
 
           lightBoxClose.src =
