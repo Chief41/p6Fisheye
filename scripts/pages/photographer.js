@@ -163,31 +163,29 @@ document.addEventListener("DOMContentLoaded", function () {
         lightBox.style.display = "block";
 
         mediaElement.addEventListener("click", function (e) {
-          e.preventDefault()
+          e.preventDefault();
           lightBoxImage = document.createElement("div");
 
-          
           const srcVideo = document.createElement("source");
           const srcImage = document.createElement("img");
-          
-          
-           if (src.video) {
+
+          if (src.video) {
             lightBoxImage = document.createElement("video");
             srcVideo.src = baseVideoPath;
             srcVideo.type = "video/mp4";
             lightBoxImage.appendChild(srcVideo);
-          } else if(src.image){ 
+          } else if (src.image) {
             srcImage.src = baseImagePath;
             lightBoxImage.appendChild(srcImage);
           }
 
           //dimension de l'image
-          lightBoxImage.style.width = "85%";
-          lightBoxImage.style.height = "87%";
-          lightBoxImage.style.objectFit = "cover";
-          lightBoxImage.style.position = "fixed";
-          lightBoxImage.style.top = "8%";
-          lightBoxImage.style.left = "6%";
+          srcImage.style.width = "85%";
+          srcImage.style.height = "87%";
+          srcImage.style.objectFit = "cover";
+          srcImage.style.position = "fixed";
+          srcImage.style.top = "8%";
+          srcImage.style.left = "6%";
 
           mainEvent.style.display = "none";
           headerBand.style.display = "none";
@@ -202,17 +200,16 @@ document.addEventListener("DOMContentLoaded", function () {
           const photos = Array.from(
             photoContenu.querySelectorAll("img, video")
           );
-          console.log(photos)
+          console.log(photos);
           let currentIndex = 0;
           console.log(currentIndex);
 
           lightBoxNext.addEventListener("click", function () {
-            currentIndex++;
+            currentIndex++
             if (currentIndex < 0) {
               currentIndex = photos.length + 1;
-              
             }
-            lightBoxImage.src = photos[currentIndex].src;
+            srcImage.src = photos[currentIndex].src;
           });
 
           lightBoxClose.src =
@@ -315,9 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const totalLike = document.createElement("p");
           for (let i = 0; i < media.likes; i++) {
             totalLike.innerText = media.likes;
-            
           }
-
 
           blockRose.classList.add("jaimeLeRose");
           blockRose.style.position = "fixed";
