@@ -125,7 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const username = photographer.name.split(" ")[0].replace("-", " ");
         const baseImagePath = `assets/Sample Photos/${username}/${src.image}`;
         const baseVideoPath = `assets/Sample Photos/${username}/${src.video}`;
-
+        const srcVideo = document.createElement("video");
+        const srcImage = document.createElement("img")
         const mediaElement = document.createElement(
           src.video ? "video" : "img"
         );
@@ -171,14 +172,14 @@ document.addEventListener("DOMContentLoaded", function () {
           let srcName;
 
           if (src.video) {
-           srcName = document.createElement("source");
-            srcName.src = baseVideoPath;        
+            srcName = document.createElement("source");
+            srcName.src = baseVideoPath;
             video.appendChild(srcName);
             lightBoxImage.appendChild(video);
+          } else if (src.image) {
+          srcImage.src = baseImagePath;
+          lightBoxImage.appendChild(srcImage);
           }
-            srcImage.src = baseImagePath;
-            lightBoxImage.appendChild(srcImage);
-          
 
           //dimension de l'image
           srcImage.style.width = "85%";
@@ -190,8 +191,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
           video.style.width = "85%";
           video.style.height = "87%";
-         video.style.objectFit = "cover";
-         video.style.position = "fixed";
+          video.style.objectFit = "cover";
+          video.style.position = "fixed";
           video.style.top = "8%";
           video.style.left = "6%";
 
@@ -221,14 +222,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
           lightBoxNext.addEventListener("click", function () {
             currentIndex++;
-            if (currentIndex < 0) {
-              currentIndex = photos.length + 1;
-            
+            if (currentIndex >= photos.length) {
+              currentIndex = 0;
             }
-            currentIndex = photos.length + 1;
             srcImage.src = photos[currentIndex].src;
             srcVideo.src = photos[currentIndex].src;
-            
+            lightBoxImage.src = photos[currentIndex].src;
           });
 
           lightBoxClose.src =

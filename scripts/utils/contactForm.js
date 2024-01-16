@@ -19,6 +19,7 @@ const myForm = document.querySelector("form");
 const divSansNom = document.querySelector("form > div");
 
 modal.style.position = "absolute";
+modal.style.zIndex = "11"
 modal.style.top = '6rem';
 modal.style.left = '8rem';
 modal.style.width = '80%';
