@@ -6,7 +6,7 @@ const reponse = fetch("data/photographers.json")
         const photoGrid = document.querySelector(".photographer_section");
         const photographerContainer = document.createElement("article");
         photographerContainer.style.cursor = "pointer";
-        const photographerId = `../../../Front-End-Fisheye/assets/Sample Photos/Photographers ID Photos/${photographer.portrait}`;
+        const photographerId = `../../../Front-End-Fisheye/assets/Sample_Photos/Photographers_ID_Photos/${photographer.portrait}`;
         
         //creation d'une balise pour l'image
         const imageElements = document.createElement("img");

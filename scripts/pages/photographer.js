@@ -97,14 +97,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const myTag = document.createElement("p");
       myTag.innerText = selectedProfil.tagline;
       myTag.style.color = "#757575";
-
+      console.log(myTag)
       // Mon bouton
       const theButton = document.querySelector(".contact_button");
       buttonDiv.style.display = "flex";
       buttonDiv.style.alignItems = "center";
 
       // La photo de profil
-      const profilPhoto = `../../../Front-End-Fisheye/assets/Sample Photos/Photographers ID Photos/${selectedProfil.portrait}`;
+      const profilPhoto = `../../../Front-End-Fisheye/assets/Sample_Photos/Photographers_ID_Photos/${selectedProfil.portrait}`;
       const myPhoto = document.createElement("img");
       myPhoto.src = profilPhoto;
       myPhoto.style.borderRadius = "50%";
@@ -123,13 +123,13 @@ document.addEventListener("DOMContentLoaded", function () {
       // Factory pour créer des éléments média
       function createMediaElement(src, photographer) {
         const username = photographer.name.split(" ")[0].replace("-", " ");
-        const baseImagePath = `assets/Sample Photos/${username}/${src.image}`;
-        const baseVideoPath = `assets/Sample Photos/${username}/${src.video}`;
-        const srcVideo = document.createElement("video");
-        const srcImage = document.createElement("img")
-        const mediaElement = document.createElement(
-          src.video ? "video" : "img"
-        );
+        const baseImagePath = `assets/Sample_Photos/${username}/${src.image}`;
+        const baseVideoPath = `assets/Sample_Photos/${username}/${src.video}`;
+
+        const mediaElement = src.video
+        ? document.createElement("video")
+        : document.createElement("img");
+
         const srcElement = document.createElement("source");
 
         if (src.video) {
@@ -152,7 +152,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const lightBoxNext = document.createElement("img");
         const lightBoxClose = document.createElement("img");
         const lightBoxPrev = document.createElement("img");
-        let lightBoxImage;
+        const lightBoxImage = document.createElement("div");
+        const imgElement = document.querySelector("img")
+        
 
         lightBox.style.position = "absolute";
         lightBox.style.top = "5%";
@@ -163,45 +165,32 @@ document.addEventListener("DOMContentLoaded", function () {
         lightBox.style.zIndex = 10;
         lightBox.style.display = "block";
 
-        mediaElement.addEventListener("click", function (e) {
-          e.preventDefault();
-          lightBoxImage = document.createElement("div");
+        mediaElement.addEventListener("click", function () {
+          
+          lightBoxImage.style.display = "block";
+          lightBoxNext.style.display = "block";
+          lightBoxPrev.style.display = "block";
 
-          const video = document.createElement("video");
-          const srcImage = document.createElement("img");
-          let srcName;
-
-          if (src.video) {
-            srcName = document.createElement("source");
-            srcName.src = baseVideoPath;
-            video.appendChild(srcName);
-            lightBoxImage.appendChild(video);
+          if(src.video) {
+            srcElement.src = baseVideoPath;
+            lightBoxImage.appendChild(mediaElement);
+            mediaElement.appendChild(srcElement);
+            
           } else if (src.image) {
-          srcImage.src = baseImagePath;
-          lightBoxImage.appendChild(srcImage);
+            imgElement.src = baseImagePath
+            lightBoxImage.appendChild(mediaElement);
+            mediaElement.appendChild(imgElement)
+		        
           }
 
-          //dimension de l'image
-          srcImage.style.width = "85%";
-          srcImage.style.height = "87%";
-          srcImage.style.objectFit = "cover";
-          srcImage.style.position = "fixed";
-          srcImage.style.top = "8%";
-          srcImage.style.left = "6%";
-
-          video.style.width = "85%";
-          video.style.height = "87%";
-          video.style.objectFit = "cover";
-          video.style.position = "fixed";
-          video.style.top = "8%";
-          video.style.left = "6%";
-
-          lightBoxImage.style.width = "85%";
-          lightBoxImage.style.height = "87%";
-          lightBoxImage.style.objectFit = "cover";
-          lightBoxImage.style.position = "fixed";
-          lightBoxImage.style.top = "8%";
-          lightBoxImage.style.left = "6%";
+          mediaElement.style.width = "81rem";
+          mediaElement.style.height = "41rem"
+          mediaElement.style.objectFit="cover"
+          mediaElement.style.borderRadius = "initial";
+          mediaElement.style.cursor = "auto";
+          mediaElement.style.marginLeft = "100px"
+        
+         
 
           mainEvent.style.display = "none";
           headerBand.style.display = "none";
@@ -224,11 +213,18 @@ document.addEventListener("DOMContentLoaded", function () {
             currentIndex++;
             if (currentIndex >= photos.length) {
               currentIndex = 0;
+            
             }
-            srcImage.src = photos[currentIndex].src;
-            srcVideo.src = photos[currentIndex].src;
-            lightBoxImage.src = photos[currentIndex].src;
-          });
+            const currentMedia = photos[currentIndex];
+
+            if (currentMedia.tagName.toLowerCase() === "img"){
+            imgElement.src = photos[currentIndex].src;
+            mediaElement.src = photos[currentIndex].src;
+            }else if (currentMedia.tagName.toLowerCase() === "video") {
+              // Si c'est une vidéo
+              mediaElement.src = currentMedia.querySelector("source").src;
+            }
+          }); 
 
           lightBoxClose.src =
             "../../../Front-End-Fisheye/assets/icons/croix.svg";
@@ -241,7 +237,9 @@ document.addEventListener("DOMContentLoaded", function () {
             lightBox.style.display = "none";
             mainEvent.style.display = "block";
             headerBand.style.display = "none";
-          });
+            location.reload()
+          }); 
+          
 
           lightBoxPrev.src =
             "../../../Front-End-Fisheye/assets/icons/prevChevron.svg";
@@ -255,18 +253,26 @@ document.addEventListener("DOMContentLoaded", function () {
             if (currentIndex < 0) {
               currentIndex = photos.length - 1;
             }
-            lightBoxImage.src = photos[currentIndex].src;
-          });
+
+            const currentMedia = photos[currentIndex];
+           
+            if (currentMedia.tagName.toLowerCase() === "img") {
+              imgElement.src = currentMedia.src;
+              mediaElement.src = currentMedia.src;
+          } else if (currentMedia.tagName.toLowerCase() === "video") {
+              mediaElement.src = currentMedia.querySelector("source").src;
+          }
+      });
 
           bodyCount.appendChild(lightBox);
           lightBox.appendChild(lightBoxImage);
           lightBox.appendChild(lightBoxNext);
           lightBox.appendChild(lightBoxPrev);
           lightBox.appendChild(lightBoxClose);
-        });
+        }); 
 
         return mediaElement;
-      }
+      } 
 
       // Fonction pour mettre à jour les images en fonction du tri
       function updateImages() {
