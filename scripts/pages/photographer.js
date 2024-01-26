@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const myTag = document.createElement("p");
       myTag.innerText = selectedProfil.tagline;
       myTag.style.color = "#757575";
-      console.log(myTag)
+      console.log(myTag);
       // Mon bouton
       const theButton = document.querySelector(".contact_button");
       buttonDiv.style.display = "flex";
@@ -127,8 +127,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const baseVideoPath = `assets/Sample_Photos/${username}/${src.video}`;
 
         const mediaElement = src.video
-        ? document.createElement("video")
-        : document.createElement("img");
+          ? document.createElement("video")
+          : document.createElement("img");
 
         const srcElement = document.createElement("source");
 
@@ -146,15 +146,13 @@ document.addEventListener("DOMContentLoaded", function () {
         mediaElement.style.objectFit = "cover";
         mediaElement.style.borderRadius = "10px";
         mediaElement.style.cursor = "pointer";
-
         //Création de ma lightbox
         const lightBox = document.querySelector(".lightBox");
         const lightBoxNext = document.createElement("img");
         const lightBoxClose = document.createElement("img");
         const lightBoxPrev = document.createElement("img");
         const lightBoxImage = document.createElement("div");
-        const imgElement = document.querySelector("img")
-        
+        const imgElement = document.querySelector("img");
 
         lightBox.style.position = "absolute";
         lightBox.style.top = "5%";
@@ -166,31 +164,28 @@ document.addEventListener("DOMContentLoaded", function () {
         lightBox.style.display = "block";
 
         mediaElement.addEventListener("click", function () {
-          
           lightBoxImage.style.display = "block";
           lightBoxNext.style.display = "block";
           lightBoxPrev.style.display = "block";
 
-          if(src.video) {
+          if (src.video) {
+            const videoMatch = document.querySelector("video");
+            videoMatch.autoplay = true;
             srcElement.src = baseVideoPath;
             lightBoxImage.appendChild(mediaElement);
-            mediaElement.appendChild(srcElement);
-            
+            videoMatch.appendChild(srcElement);
           } else if (src.image) {
-            imgElement.src = baseImagePath
+            imgElement.src = baseImagePath;
             lightBoxImage.appendChild(mediaElement);
-            mediaElement.appendChild(imgElement)
-		        
+            mediaElement.appendChild(imgElement);
           }
 
           mediaElement.style.width = "81rem";
-          mediaElement.style.height = "41rem"
-          mediaElement.style.objectFit="cover"
+          mediaElement.style.height = "41rem";
+          mediaElement.style.objectFit = "cover";
           mediaElement.style.borderRadius = "initial";
           mediaElement.style.cursor = "auto";
-          mediaElement.style.marginLeft = "100px"
-        
-         
+          mediaElement.style.marginLeft = "100px";
 
           mainEvent.style.display = "none";
           headerBand.style.display = "none";
@@ -206,25 +201,25 @@ document.addEventListener("DOMContentLoaded", function () {
             photoContenu.querySelectorAll("img, video")
           );
           console.log(photos);
-          let currentIndex = 0;
+          let currentIndex;
           console.log(currentIndex);
 
-          lightBoxNext.addEventListener("click", function () {
-            currentIndex++;
+          lightBoxNext.addEventListener("click", function (e) {
+            console.log("INDEX==========",photos.indexOf( e.target.baseUri));
+            //currentIndex++;
             if (currentIndex >= photos.length) {
-              currentIndex = 0;
-            
+              currentIndex = photos.length - 1;
             }
+
             const currentMedia = photos[currentIndex];
 
-            if (currentMedia.tagName.toLowerCase() === "img"){
-            imgElement.src = photos[currentIndex].src;
-            mediaElement.src = photos[currentIndex].src;
-            }else if (currentMedia.tagName.toLowerCase() === "video") {
-              // Si c'est une vidéo
+            if (currentMedia.tagName.toLowerCase() === "img") {
+              imgElement.src = currentMedia.src;
+              mediaElement.src = currentMedia.src;
+            } else if (currentMedia.tagName.toLowerCase() === "video") {
               mediaElement.src = currentMedia.querySelector("source").src;
             }
-          }); 
+          });
 
           lightBoxClose.src =
             "../../../Front-End-Fisheye/assets/icons/croix.svg";
@@ -237,9 +232,8 @@ document.addEventListener("DOMContentLoaded", function () {
             lightBox.style.display = "none";
             mainEvent.style.display = "block";
             headerBand.style.display = "none";
-            location.reload()
-          }); 
-          
+            location.reload();
+          });
 
           lightBoxPrev.src =
             "../../../Front-End-Fisheye/assets/icons/prevChevron.svg";
@@ -255,24 +249,24 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const currentMedia = photos[currentIndex];
-           
+
             if (currentMedia.tagName.toLowerCase() === "img") {
               imgElement.src = currentMedia.src;
               mediaElement.src = currentMedia.src;
-          } else if (currentMedia.tagName.toLowerCase() === "video") {
+            } else if (currentMedia.tagName.toLowerCase() === "video") {
               mediaElement.src = currentMedia.querySelector("source").src;
-          }
-      });
+            }
+          });
 
           bodyCount.appendChild(lightBox);
           lightBox.appendChild(lightBoxImage);
           lightBox.appendChild(lightBoxNext);
           lightBox.appendChild(lightBoxPrev);
           lightBox.appendChild(lightBoxClose);
-        }); 
+        });
 
         return mediaElement;
-      } 
+      }
 
       // Fonction pour mettre à jour les images en fonction du tri
       function updateImages() {
