@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const baseImagePath = `assets/Sample_Photos/${username}/${src.image}`;
         const baseVideoPath = `assets/Sample_Photos/${username}/${src.video}`;
 
-        const mediaElement = src.video
+        let mediaElement = src.video
           ? document.createElement("video")
           : document.createElement("img");
 
@@ -197,28 +197,29 @@ document.addEventListener("DOMContentLoaded", function () {
           lightBoxNext.style.right = "3.2rem";
           lightBoxNext.style.top = "20rem";
 
-          const photos = Array.from(
-            photoContenu.querySelectorAll("img, video")
-          );
-          console.log(photos);
-          let currentIndex;
-          console.log(currentIndex);
+          const mediaArr = media.filter(el => el.photographerId === photographer.id)
+          let index = mediaArr.findIndex(element => element.image == src.image)
+          console.log(index)
+          console.log(mediaElement);
 
           lightBoxNext.addEventListener("click", function (e) {
-            console.log("INDEX==========",photos.indexOf( e.target.baseUri));
-            //currentIndex++;
-            if (currentIndex >= photos.length) {
-              currentIndex = photos.length - 1;
+            index ++;
+            console.log(e.target.src);
+            if (index >= mediaArr.length) {
+              index = 0;
             }
-
-            const currentMedia = photos[currentIndex];
-
-            if (currentMedia.tagName.toLowerCase() === "img") {
-              imgElement.src = currentMedia.src;
-              mediaElement.src = currentMedia.src;
-            } else if (currentMedia.tagName.toLowerCase() === "video") {
-              mediaElement.src = currentMedia.querySelector("source").src;
-            }
+          
+            const currentMedia = mediaArr[index];
+            const currentMediaNext = mediaArr[index +1];
+            console.log(currentMediaNext)
+            if (currentMedia.video || currentMediaNext.video) {
+              //mediaElement = document.createElement("video");
+              mediaElement.appendChild(srcElement);
+              srcElement.src = `assets/Sample_Photos/${username}/${currentMedia.video}`;
+              mediaElement.type = "video/mp4";
+              mediaElement.autoplay = true;
+            }else if (currentMedia.image) {
+              mediaElement.src = `assets/Sample_Photos/${username}/${currentMedia.image}`;}
           });
 
           lightBoxClose.src =
