@@ -126,18 +126,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const baseImagePath = `assets/Sample_Photos/${username}/${src.image}`;
         const baseVideoPath = `assets/Sample_Photos/${username}/${src.video}`;
 
-        let mediaElement = src.video
-          ? document.createElement("video")
-          : document.createElement("img");
-
-        const srcElement = document.createElement("source");
+        const mediaElement = document.createElement("div");
+        const baliseVideo = document.createElement("video");
+        const baliseImg = document.createElement("img");
+        
 
         if (src.video) {
-          mediaElement.appendChild(srcElement);
+          const srcElement = document.createElement("source");
           srcElement.src = baseVideoPath;
           srcElement.type = "video/mp4";
+          mediaElement.appendChild(baliseVideo);
+          baliseVideo.appendChild(srcElement)
         } else if (src.image) {
           mediaElement.src = baseImagePath;
+          mediaElement.appendChild(baliseImg);
         }
 
         mediaElement.style.width = "324px";
@@ -198,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
           lightBoxNext.style.top = "20rem";
 
           const mediaArr = media.filter(el => el.photographerId === photographer.id)
-          let index = mediaArr.findIndex(element => element.image == src.image)
+          let index = mediaArr.findIndex(element => element.image === src.image)
           console.log(index)
           console.log(mediaElement);
 
@@ -213,14 +215,17 @@ document.addEventListener("DOMContentLoaded", function () {
             const currentMediaNext = mediaArr[index +1];
             console.log(currentMediaNext)
             if (currentMedia.video || currentMediaNext.video) {
-              //mediaElement = document.createElement("video");
-              mediaElement.appendChild(srcElement);
-              srcElement.src = `assets/Sample_Photos/${username}/${currentMedia.video}`;
+              const srcElement = document.createElement("source");
+              console.log("pppppp") 
+              srcElement.src = baseVideoPath
               mediaElement.type = "video/mp4";
               mediaElement.autoplay = true;
+              mediaElement.appendChild(baliseVideo);
+              baliseVideo.appendChild(srcElement);
             }else if (currentMedia.image) {
-              mediaElement.src = `assets/Sample_Photos/${username}/${currentMedia.image}`;}
-          });
+              console.log("aaaaa")
+              mediaElement.src = baseImagePath
+          }});
 
           lightBoxClose.src =
             "../../../Front-End-Fisheye/assets/icons/croix.svg";
