@@ -223,8 +223,8 @@ document.addEventListener("DOMContentLoaded", function () {
               mediaElement.appendChild(baliseVideo);
               baliseVideo.appendChild(srcElement);
             }else if (currentMedia.image) {
-              console.log("aaaaa")
-              mediaElement.src = baseImagePath
+              mediaElement.appendChild(baliseImg);
+              baliseImg.src = baseImagePath
           }});
 
           lightBoxClose.src =
